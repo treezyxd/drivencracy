@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
+import pollRoutes from "./routes/pollRoutes.js";
 
 dotenv.config();
 
@@ -12,6 +13,8 @@ app.use(cors());
 app.get('/ping', (req, res) => {
   res.send('pong');
 });
+
+app.use(pollRoutes);
 
 const PORT = process.env.PORT || 5000;
 
