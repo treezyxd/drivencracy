@@ -5,15 +5,15 @@ import dayjs from "dayjs";
 export async function postVote (req,res){
   const { id } = req.params;
   let currentDate = dayjs();
-  let date= currentDate.format("YYYY-MM-DD HH:mm")
-  let choice= await db.collection("choices").findOne({_id:  ObjectId(id)})
-  if (choice){
-      let poll= await db.collection("polls").findOne({_id:  ObjectId(choice.pollId)})
-      const timestamp= dayjs(poll.expireAt).toDate().getTime()
+  let date= currentDate.format("YYYY-MM-DD HH:mm");
+  let choice= await db.collection("choices").findOne({_id:  ObjectId(id)});
+  if (choice) {
+      let poll = await db.collection("polls").findOne({_id:  ObjectId(choice.pollId)});
+      const timestamp = dayjs(poll.expireAt).toDate().getTime();
       if (poll && currentDate < timestamp){
           try{
-              await db.collection("votes").insertOne({createdAt: date, choiceId:  ObjectId(id)})
-              return res.sendStatus(201)
+            let vote = await db.collection("votes").insertOne({createdAt: date, choiceId:  ObjectId(id)});
+            return res.sendStatus(201).send(vote);
           } catch(err){
               console.log(err.message)
           }
